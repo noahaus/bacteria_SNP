@@ -12,3 +12,4 @@ running on sapelo2 cluster:
 
 _qsub -v "reference=reference.fa,email=email@uga.edu" ./bacteria_SNP/bacteria_pathogen_SNP.sh_
 
+caveats: For pair-read data, please have the suffix of the fastq file be '...R1.fastq'
