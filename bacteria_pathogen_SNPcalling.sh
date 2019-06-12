@@ -55,8 +55,10 @@ module add BCFtools/1.9-foss-2016b
 ls | grep "nodup.sorted.bam" > bam_list.txt
 bcftools mpileup -Ou -f $REF -b bam_list.txt > temp.pileup.vcf
 mv temp.pileup.vcf -t $PILEUP
+cd $PILEUP
 bcftools call -Ou --ploidy 1 -mv temp.pileup.vcf > temp.raw.vcf
 mv temp.raw.vcf -t $RAW
+cd $RAW
 bcftools filter -s LowQual -e '%QUAL<20 || TYPE="indel"' temp.raw.vcf > output.filter.vcf
 python $STEP_3 -i output.filter.vcf
 mv output.filter.vcf -t $FILTER
