@@ -66,5 +66,5 @@ echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 module add RAxML/8.2.11-foss-2016b-mpi-avx
 cd $FILTER
 mpirun raxmlHPC-MPI-AVX -s output.filter.min4.phy -n isolates -m GTRGAMMA -N 100 -p 1000
-mv *.53_isolates.*  *.53_isolates -t $RAXML
+mv *.isolates.*  *.isolates -t $RAXML
 echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EMAIL
