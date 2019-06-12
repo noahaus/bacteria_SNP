@@ -32,22 +32,22 @@ module add BWA/0.7.17-foss-2016b
 module add SAMtools/1.9-foss-2016b
 #Variable for the reference genome.
 #Let's index the reference genome.
-#REF=$1
-#EMAIL=$2
-REF=/scratch/noahaus/pipeline_script/fastq_data_set-tb_complex/NC_002945v4.fasta
+REF=$1
+EMAIL=$2
+#REF=/scratch/noahaus/pipeline_script/fastq_data_set-tb_complex/NC_002945v4.fasta
 
 #STEP 1: ALIGN TO REFERENCE GENOME
 python pairread2sortBAM.py $REF
 mv *.sorted.bam -t $BASIC
 cd $BASIC
-echo "Step 1 of pipeline complete" | mail -s "STEP 1: ALIGN TO REFERENCE GENOME" noahaus@uga.edu
+echo "Step 1 of pipeline complete" | mail -s "STEP 1: ALIGN TO REFERENCE GENOME" $EMAIL
 
 #STEP 2: REMOVE DUPLICATE READS
 module add picard/2.16.0-Java-1.8.0_144
 python $STEP_2
 mv *.nodup.sorted.bam -t $NODUP
 cd $NODUP
-echo "Step 2 of pipeline complete" | mail -s "STEP 2: REMOVE DUPLICATE READS" noahaus@uga.edu
+echo "Step 2 of pipeline complete" | mail -s "STEP 2: REMOVE DUPLICATE READS" $EMAIL
 
 #STEP 3: VARIANT CALLING
 module add BCFtools/1.9-foss-2016b
@@ -59,11 +59,11 @@ mv temp.raw.vcf -t $RAW
 bcftools filter -s LowQual -e '%QUAL<20 || TYPE="indel"' temp.raw.vcf > output.filter.vcf
 python $STEP_3 -i output.filter.vcf
 mv output.filter.vcf -t $FILTER
-echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" noahaus@uga.edu
+echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 
 #STEP 4: RAxML TREE GENERATION
 module add RAxML/8.2.11-foss-2016b-mpi-avx
 cd $FILTER
 mpirun raxmlHPC-MPI-AVX -s output.filter.min4.phy -n isolates -m GTRGAMMA -N 100 -p 1000
 mv *.53_isolates.*  *.53_isolates -t $RAXML
-echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" noahaus@uga.edu
+echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EMAIL
