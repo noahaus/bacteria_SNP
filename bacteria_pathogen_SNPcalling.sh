@@ -11,20 +11,20 @@
 echo "Bash version ${BASH_VERSION}..."
 #Let's start by creating the structure of the output folder.
 #At the end of the analysis
-OUT=$(pwd)output_dir
-BAM=$(pwd)output_dir/BAM
-BASIC=$(pwd)output_dir/BAM/basic
-NODUP=$(pwd)output_dir/BAM/nodup
-VCF=$(pwd)output_dir/VCF
-FILTER=$(pwd)output_dir/VCF/filtered
-PILEUP=$(pwd)output_dir/VCF/pileup
-RAW=$(pwd)output_dir/VCF/raw
-RAXML=$(pwd)output_dir/RAXML
+OUT=$(pwd)/output_dir
+BAM=$(pwd)/output_dir/BAM
+BASIC=$(pwd)/output_dir/BAM/basic
+NODUP=$(pwd)/output_dir/BAM/nodup
+VCF=$(pwd)/output_dir/VCF
+FILTER=$(pwd)/output_dir/VCF/filtered
+PILEUP=$(pwd)/output_dir/VCF/pileup
+RAW=$(pwd)/output_dir/VCF/raw
+RAXML=$(pwd)/output_dir/RAXML
 
 #Variables for scripts in the package.
-STEP_1=$(pwd)bacteria_SNP/pairread2sortBAM.py
-STEP_2=$(pwd)bacteria_SNP/remove_duplicates.py
-STEP_3=$(pwd)bacteria_SNP/vcf2phylip.py
+STEP_1=$(pwd)/bacteria_SNP/pairread2sortBAM.py
+STEP_2=$(pwd)/bacteria_SNP/remove_duplicates.py
+STEP_3=$(pwd)/bacteria_SNP/vcf2phylip.py
 
 #create the output structure.
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
