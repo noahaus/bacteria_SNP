@@ -22,9 +22,9 @@ RAW=$(pwd)output_dir/VCF/raw
 RAXML=$(pwd)output_dir/RAXML
 
 #Variables for scripts in the package.
-STEP_1=$(pwd)/script_dir/pairread2sortBAM.py
-STEP_2=$(pwd)/script_dir/remove_duplicates.py
-STEP_3=$(pwd)/script_dir/vcf2phylip.py
+STEP_1=$(pwd)/bacteria_SNP/pairread2sortBAM.py
+STEP_2=$(pwd)/bacteria_SNP/remove_duplicates.py
+STEP_3=$(pwd)/bacteria_SNP/vcf2phylip.py
 
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
 
