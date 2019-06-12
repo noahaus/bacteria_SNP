@@ -26,6 +26,7 @@ STEP_1=$(pwd)bacteria_SNP/pairread2sortBAM.py
 STEP_2=$(pwd)bacteria_SNP/remove_duplicates.py
 STEP_3=$(pwd)bacteria_SNP/vcf2phylip.py
 
+#create the output structure.
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
 
 module add BWA/0.7.17-foss-2016b
