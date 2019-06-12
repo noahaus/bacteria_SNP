@@ -12,4 +12,6 @@ running on sapelo2 cluster:
 
 _qsub -v "reference=reference.fa,email=email@uga.edu" ./bacteria_SNP/bacteria_pathogen_SNP.sh_
 
+To check on your output, just move into the output_dir/ directory!
+
 Still in development, changes coming soon!
