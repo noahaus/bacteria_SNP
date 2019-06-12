@@ -22,9 +22,9 @@ RAW=$(pwd)output_dir/VCF/raw
 RAXML=$(pwd)output_dir/RAXML
 
 #Variables for scripts in the package.
-STEP_1=$(pwd)/bacteria_SNP/pairread2sortBAM.py
-STEP_2=$(pwd)/bacteria_SNP/remove_duplicates.py
-STEP_3=$(pwd)/bacteria_SNP/vcf2phylip.py
+STEP_1=$(pwd)bacteria_SNP/pairread2sortBAM.py
+STEP_2=$(pwd)bacteria_SNP/remove_duplicates.py
+STEP_3=$(pwd)bacteria_SNP/vcf2phylip.py
 
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
 
@@ -37,7 +37,7 @@ EMAIL=$2
 #REF=/scratch/noahaus/pipeline_script/fastq_data_set-tb_complex/NC_002945v4.fasta
 
 #STEP 1: ALIGN TO REFERENCE GENOME
-python pairread2sortBAM.py $REF
+python $STEP_1 $REF
 mv *.sorted.bam -t $BASIC
 cd $BASIC
 echo "Step 1 of pipeline complete" | mail -s "STEP 1: ALIGN TO REFERENCE GENOME" $EMAIL
