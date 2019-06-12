@@ -61,12 +61,13 @@ mv temp.raw.vcf -t $RAW
 cd $RAW
 bcftools filter -s LowQual -e '%QUAL<20 || TYPE="indel"' temp.raw.vcf > output.filter.vcf
 python $STEP_3 -i output.filter.vcf
-mv output.filter.vcf -t $FILTER
+PHY=$(ls | grep ".phy")
+mv output.filter.vcf $PHY -t $FILTER
 echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 
 #STEP 4: RAxML TREE GENERATION
 module add RAxML/8.2.11-foss-2016b-mpi-avx
 cd $FILTER
-mpirun raxmlHPC-MPI-AVX -s output.filter.min4.phy -n isolates -m GTRGAMMA -N 100 -p 1000
+mpirun raxmlHPC-MPI-AVX -s $PHY -n isolates -m GTRGAMMA -N 100 -p 1000
 mv *.isolates.*  *.isolates -t $RAXML
 echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EMAIL
