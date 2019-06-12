@@ -6,11 +6,11 @@ FASTQ samples -> BAM files, VCF files, RAxML tree, Alignment Stats.
 
 running with bash:
 
-_bash ./bacteria_SNP/bacteria_pathogen_SNP.sh ref.fa email address_
+_bash ./bacteria_SNP/bacteria_pathogen_SNP.sh /path/to/ref.fa email address_
 
 running on sapelo2 cluster:
 
-_qsub -v "reference=reference.fa,email=email@uga.edu" ./bacteria_SNP/bacteria_pathogen_SNP.sh_
+_qsub -v "reference=/path/to/reference.fa,email=email@uga.edu" ./bacteria_SNP/bacteria_pathogen_SNP.sh_
 
 To check on your output, just move into the output_dir/ directory!
 
