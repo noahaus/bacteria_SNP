@@ -61,7 +61,7 @@ for i in range(len(R1_list)):
     os.system("echo \"{},{},{},{},{},{},{}\" >> read_stats.csv".format(sample_name,R1_size,R2_size,Q_ave_R1,Q_ave_R2,R1_ave_read_length,R2_ave_read_length))
 
 os.system("mv read_stats.csv -t {}".format(stats_dir))
-os.system("cd {}".format(bam_dir))
+os.chdir(bam_dir)
 
 os.system('ls | grep ".sorted.bam" > bam_call.txt')
 bam = open("bam_call.txt", "r")
@@ -80,5 +80,5 @@ for i in range(len(bam_list)):
     unmapped_reads = total_reads - mapped_reads
     os.system("echo \"{},{},{}\" >> bam_stat.csv".format(mapped_reads,ave_coverage,unmapped_reads))
 os.system("mv bam_stats.csv -t {}".format(stats_dir))
-os.system("cd {}".format(stats_dir))
+os.chdir(stats_dir)
 os.system("paste -d \",\" read_stats.csv bam_stats.csv")
