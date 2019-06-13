@@ -11,8 +11,13 @@ import os # use in order to call commands from terminal script is called in
 #this program will create the stats files that data will be extracted from.
 #if there are 15 samples studied then there will be 15 rows in the outputted csv.
 
+fastq_dir = sys.argv[1].strip()
+bam_dir = sys.argv[2].strip()
+stats_dir = sys.argv[3].strip()
+
 #STEP 1: fastq stats generation.
 #gunzip everything in the temp_folder
+os.system("cd {}".format(fastq_dir))
 print("unzipping files if needed")
 os.system('gunzip -r ./')
 print("files unzipped")
@@ -37,7 +42,7 @@ for R2_line in R2:
 
 #let's start with some basic read stats
 os.system('touch read_stats.csv') #create the read_stats file
-os.system('echo "sample_name,R1_size,R2_size,Q_ave_R1,Q_ave_R2,ave_read_length" >> read_stats.csv') #header of read_stats.csv
+os.system('echo "sample_name,R1_size(full),R2_size(full),Q_ave_R1,Q_ave_R2,R1_ave_read_length,R2_ave_read_length" >> read_stats.csv') #header of read_stats.csv
 for i in range(len(R1_list)):
     sample_name = R1_list[i].replace("_R1_001.fastq","")
     output_R1 = R1_list[i].replace("_R1_001.fastq",".R1.stats.txt")
@@ -46,3 +51,33 @@ for i in range(len(R1_list)):
     os.system(generate_fastq_stats.format(R1_list[i],output_R1))
     os.system(generate_fastq_stats.format(R2_list[i],output_R2))
     print("{} and {} created.".format(output_R1,output_R2))
+    R1_size = os.popen("wc -c {}".format(output_R1))
+    R2_size = os.popen("wc -c {}".format(output_R2))
+    Q_ave_R1 = os.popen("cat {} | sed \"1d\" | awk '{sum+=$6} END{print sum/NR}'".format(output_R1))
+    Q_ave_R2 = os.popen("cat {} | sed \"1d\" | awk '{sum+=$6} END{print sum/NR}'".format(output_R2))
+    R1_ave_read_length = os.popen("awk '{if(NR%4==2) {count++; bases += length} } END{print bases/count}' {}".format(R1_list[i]))
+    R2_ave_read_length = os.popen("awk '{if(NR%4==2) {count++; bases += length} } END{print bases/count}' {}".format(R2_list[i]))
+    os.system("echo \"{},{},{},{},{},{},{}\" >> read_stats.csv".format(sample_name,R1_size,R2_size,Q_ave_R1,Q_ave_R2,R1_ave_read_length,R2_ave_read_length))
+
+os.system("mv read_stats.csv -t {}".format(stats_dir))
+os.system("cd {}".format(bam_dir))
+
+os.system('ls | grep ".sorted.bam" > bam_call.txt')
+bam = open("bam_call.txt", "r")
+
+bam_list = []
+
+for line in bam:
+    bam_list.append(line.strip())
+
+os.system('touch bam_stats.csv')
+os.system('echo "total_mapped_reads,ave_coverage,unmapped_reads" >> bam_stats.csv')
+for i in range(len(bam_list)):
+    ave_coverage = os.popen("samtools depth {} | awk '{sum+=$3} END { print sum/NR}'".format(bam_list[i]))
+    total_reads = os.popen("samtools flagstat {} | awk -F " " 'NR==1 {print $1}'".format(bam_list[i]))
+    mapped_reads = os.popen("samtools flagstat {} | awk -F " " 'NR==1 {print $5}'".format(bam_list[i]))
+    unmapped_reads = total_reads - mapped_reads
+    os.system("echo \"{},{},{}\" >> bam_stat.csv".format(mapped_reads,ave_coverage,unmapped_reads))
+os.system("mv bam_stats.cov -t {}".format(stats_dir))
+os.system("cd {}".format(stats_dir))
+os.system("paste -d \",\" read_stats.csv bam_stats.csv")

@@ -20,14 +20,19 @@ FILTER=$(pwd)/output_dir/VCF/filtered
 PILEUP=$(pwd)/output_dir/VCF/pileup
 RAW=$(pwd)/output_dir/VCF/raw
 RAXML=$(pwd)/output_dir/RAXML
+FASTQ=$(pwd)/output_dir/FASTQ
+STATS=$(pwd)/output_dir/STATS
 
 #Variables for scripts in the package.
 STEP_1=$(pwd)/bacteria_SNP/pairread2sortBAM.py
 STEP_2=$(pwd)/bacteria_SNP/remove_duplicates.py
 STEP_3=$(pwd)/bacteria_SNP/vcf2phylip.py
+STEP_5=$(pwd)/bacteria_SNP/stat_summary.py
 
 #create the output structure.
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
+
+cp *.fastq* -t $FASTQ
 
 module add BWA/0.7.17-foss-2016b
 module add SAMtools/1.9-foss-2016b
@@ -72,3 +77,7 @@ cd $FILTER
 mpirun raxmlHPC-MPI-AVX -s $PHY -n isolates -m GTRGAMMA -N 100 -p 1000
 mv *.isolates.*  *.isolates -t $RAXML
 echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EMAIL
+
+#STEP 5: ALIGNMENT STATS
+module
+python $STEP_5 $FASTQ $NODUP 
