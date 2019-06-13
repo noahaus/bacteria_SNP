@@ -18,6 +18,7 @@ stats_dir = sys.argv[3].strip()
 #STEP 1: fastq stats generation.
 #gunzip everything in the temp_folder
 os.system("cd {}".format(fastq_dir))
+os.system("echo $(pwd)")
 print("unzipping files if needed")
 os.system('gunzip -r ./')
 print("files unzipped")
