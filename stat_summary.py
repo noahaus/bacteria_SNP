@@ -78,6 +78,6 @@ for i in range(len(bam_list)):
     mapped_reads = os.popen("samtools flagstat {} | awk -F " " 'NR==1 {print $5}'".format(bam_list[i]))
     unmapped_reads = total_reads - mapped_reads
     os.system("echo \"{},{},{}\" >> bam_stat.csv".format(mapped_reads,ave_coverage,unmapped_reads))
-os.system("mv bam_stats.cov -t {}".format(stats_dir))
+os.system("mv bam_stats.csv -t {}".format(stats_dir))
 os.system("cd {}".format(stats_dir))
 os.system("paste -d \",\" read_stats.csv bam_stats.csv")
