@@ -31,11 +31,12 @@ mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
 
 module add BWA/0.7.17-foss-2016b
 module add SAMtools/1.9-foss-2016b
-#Variable for the reference genome.
-#Let's index the reference genome.
+#Variable for the reference genome. first argument
+#Variable for the email you wish to get notifications from. second arguement
+#REF=/scratch/noahaus/pipeline_script/fastq_data_set-tb_complex/NC_002945v4.fasta
 REF=$1
 EMAIL=$2
-#REF=/scratch/noahaus/pipeline_script/fastq_data_set-tb_complex/NC_002945v4.fasta
+
 
 #STEP 1: ALIGN TO REFERENCE GENOME
 python $STEP_1 $REF
