@@ -25,8 +25,8 @@ os.system('gunzip -r ./')
 print("files unzipped")
 
 #separate the pair reads into two files
-os.system('ls | grep "R1" > R_1.txt')
-os.system('ls | grep "R2" > R_2.txt')
+os.system('ls | grep "R1*.fastq" > R_1.txt')
+os.system('ls | grep "R2*.fastq" > R_2.txt')
 
 #let's put the file names in a list data structure.
 R1 = open("R_1.txt", "r")
@@ -59,9 +59,10 @@ for i in range(len(R1_list)):
     Q_ave_R2 = sp.check_output("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R2),shell=True).decode('ascii')
     R1_ave_read_length = sp.check_output("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R1_list[i]),shell=True).decode('ascii')
     R2_ave_read_length = sp.check_output("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R2_list[i]),shell=True).decode('ascii')    
-    os.system("echo \"{},{},{},{},{},{},{}\" >> read_stats.csv".format(sample_name,R1_size,R2_size,Q_ave_R1,Q_ave_R2,R1_ave_read_length,R2_ave_read_length))
+    os.system("echo \"{},{},{},{},{},{},{}\" >> read_stats.csv".format(sample_name,R1_size.strip(),R2_size.strip(),Q_ave_R1.strip(),Q_ave_R2.strip(),R1_ave_read_length.strip(),R2_ave_read_length.strip()))
 
 os.system("mv read_stats.csv -t {}".format(stats_dir))
+os.system("rm *.R1.stats.txt *.R2.stats.txt")
 os.chdir(bam_dir)
 
 os.system('ls | grep ".sorted.bam" > bam_call.txt')
@@ -77,7 +78,7 @@ os.system('echo "total_mapped_reads,ave_coverage,unmapped_reads" >> bam_stats.cs
 for i in range(len(bam_list)):
     ave_coverage = sp.check_output("samtools depth {} | awk '{{sum+=$3}} END {{ print sum/NR}}'".format(bam_list[i]),shell=True).decode('ascii')
     total_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==1 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii')
-    mapped_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==1 {{print $5}}'".format(bam_list[i]),shell=True).decode('ascii')
+    mapped_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==5 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii')
     unmapped_reads = int(total_reads) - int(mapped_reads)
     os.system("echo \"{},{},{}\" >> bam_stat.csv".format(mapped_reads,ave_coverage,unmapped_reads))
 os.system("mv bam_stats.csv -t {}".format(stats_dir))
