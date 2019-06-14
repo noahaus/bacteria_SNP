@@ -57,7 +57,7 @@ for i in range(len(R1_list)):
     Q_ave_R1 = os.popen("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R1))
     Q_ave_R2 = os.popen("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R2))
     R1_ave_read_length = os.popen("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R1_list[i]))
-    R2_ave_read_length = os.popen("awk '{{if(NR%4==2) {{count++; bases += length} } END{{print bases/count}' {}".format(R2_list[i]))    
+    R2_ave_read_length = os.popen("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R2_list[i]))    
     os.system("echo \"{},{},{},{},{},{},{}\" >> read_stats.csv".format(sample_name,R1_size,R2_size,Q_ave_R1,Q_ave_R2,R1_ave_read_length,R2_ave_read_length))
 
 os.system("mv read_stats.csv -t {}".format(stats_dir))
