@@ -78,7 +78,7 @@ for i in range(len(bam_list)):
     ave_coverage = sp.check_output("samtools depth {} | awk '{{sum+=$3}} END {{ print sum/NR}}'".format(bam_list[i]),shell=True).decode('ascii')
     total_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==1 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii')
     mapped_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==1 {{print $5}}'".format(bam_list[i]),shell=True).decode('ascii')
-    unmapped_reads = total_reads - mapped_reads
+    unmapped_reads = int(total_reads) - int(mapped_reads)
     os.system("echo \"{},{},{}\" >> bam_stat.csv".format(mapped_reads,ave_coverage,unmapped_reads))
 os.system("mv bam_stats.csv -t {}".format(stats_dir))
 os.chdir(stats_dir)
