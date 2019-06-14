@@ -25,8 +25,8 @@ os.system('gunzip -r ./')
 print("files unzipped")
 
 #separate the pair reads into two files
-os.system('ls | grep "R1*.fastq" > R_1.txt')
-os.system('ls | grep "R2*.fastq" > R_2.txt')
+os.system('ls | grep \'\<R1*.fastq\>\' > R_1.txt')
+os.system('ls | grep \'\<R2*.fastq\>\' > R_2.txt')
 
 #let's put the file names in a list data structure.
 R1 = open("R_1.txt", "r")
