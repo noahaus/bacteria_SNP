@@ -54,7 +54,7 @@ for i in range(len(R1_list)):
     os.system(generate_fastq_stats.format(R2_list[i],output_R2))
     print("{} and {} created.".format(output_R1,output_R2))
     R1_size = sp.check_output("wc -c {}".format(output_R1),shell=True)
-    R2_size = sp.check_output("wc -c {}".format(output_R2))
+    R2_size = sp.check_output("wc -c {}".format(output_R2),shell=True)
     Q_ave_R1 = sp.check_output("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R1),shell=True)
     Q_ave_R2 = sp.check_output("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R2),shell=True)
     R1_ave_read_length = sp.check_output("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R1_list[i]),shell=True)
