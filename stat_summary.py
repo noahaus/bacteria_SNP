@@ -53,8 +53,8 @@ for i in range(len(R1_list)):
     os.system(generate_fastq_stats.format(R1_list[i],output_R1))
     os.system(generate_fastq_stats.format(R2_list[i],output_R2))
     print("{} and {} created.".format(output_R1,output_R2))
-    R1_size = sp.check_output("wc -c {}".format(output_R1),shell=True).decode('ascii')
-    R2_size = sp.check_output("wc -c {}".format(output_R2),shell=True).decode('ascii')
+    R1_size = sp.check_output("wc -c {} | awk -F '[ ]' '{{print $1}}'".format(output_R1),shell=True).decode('ascii')
+    R2_size = sp.check_output("wc -c {} | awk -F '[ ]' '{{print $1}}'".format(output_R2),shell=True).decode('ascii')
     Q_ave_R1 = sp.check_output("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R1),shell=True).decode('ascii')
     Q_ave_R2 = sp.check_output("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R2),shell=True).decode('ascii')
     R1_ave_read_length = sp.check_output("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R1_list[i]),shell=True).decode('ascii')
@@ -76,6 +76,7 @@ for line in bam:
 os.system('touch bam_stats.csv')
 os.system('echo "total_mapped_reads,ave_coverage,unmapped_reads" >> bam_stats.csv')
 for i in range(len(bam_list)):
+    print("viewing {}".format(bam_list[i]))
     ave_coverage = sp.check_output("samtools depth {} | awk '{{sum+=$3}} END {{ print sum/NR}}'".format(bam_list[i]),shell=True).decode('ascii')
     total_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==1 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii')
     mapped_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==5 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii')
@@ -84,3 +85,4 @@ for i in range(len(bam_list)):
 os.system("mv bam_stats.csv -t {}".format(stats_dir))
 os.chdir(stats_dir)
 os.system("paste -d \",\" read_stats.csv bam_stats.csv > stat_summary.csv")
+print("DONE")
