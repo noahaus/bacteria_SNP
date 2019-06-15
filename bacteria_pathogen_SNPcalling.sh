@@ -32,16 +32,15 @@ STEP_5=$(pwd)/bacteria_SNP/stat_summary.py
 #create the output structure.
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
 
+#move our fastq samples into the FASTQ folder. this way we always have a way to access our original data
 cp *.fastq* -t $FASTQ
 
+#we will need these softwares provided by the cluster for step 1.
 module add BWA/0.7.17-foss-2016b
 module add SAMtools/1.9-foss-2016b
-#Variable for the reference genome. first argument
-#Variable for the email you wish to get notifications from. second arguement
-#REF=/scratch/noahaus/pipeline_script/fastq_data_set-tb_complex/NC_002945v4.fasta
-REF=$1
-EMAIL=$2
 
+REF=$1  #Variable for the reference genome. first argument
+EMAIL=$2  #Variable for the email you wish to get notifications from. second arguement
 
 #STEP 1: ALIGN TO REFERENCE GENOME
 python $STEP_1 $REF
@@ -79,5 +78,6 @@ mv *.isolates.*  *.isolates -t $RAXML
 echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EMAIL
 
 #STEP 5: ALIGNMENT STATS
-module
-python $STEP_5 $FASTQ $NODUP 
+module add FASTX-Toolkit/0.0.14-foss-2016b
+python $STEP_5 $FASTQ $NODUP $STATS
+echo "Step 5 of pipeline complete" | mail -s "STEP 5: ALIGNMENT STATS" $EMAIL
