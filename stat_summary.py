@@ -62,7 +62,7 @@ for i in range(len(R1_list)):
     os.system("echo \"{},{},{},{},{},{},{}\" >> read_stats.csv".format(sample_name,R1_size.strip(),R2_size.strip(),Q_ave_R1.strip(),Q_ave_R2.strip(),R1_ave_read_length.strip(),R2_ave_read_length.strip()))
 
 os.system("mv read_stats.csv -t {}".format(stats_dir))
-os.system("rm *.R1.stats.txt *.R2.stats.txt R_1.txt R_2.txt")
+os.system("rm *.R1.stats.txt *.R2.stats.txt R_1.txt R_2.txt read_stats.csv")
 os.chdir(bam_dir)
 
 os.system('ls | grep ".sorted.bam" > bam_call.txt')
