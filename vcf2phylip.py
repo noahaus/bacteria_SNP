@@ -268,10 +268,12 @@ def main():
 							snp_multinuc += 1
 							# Keep track of loci rejected due to exceeded missing data
 							snp_shallow += 1
+							print(line)
 							malformed.append(line)
 					else:
 						# Keep track of loci rejected due to exceeded missing data
 						snp_shallow += 1
+						print(line)
 						malformed.append(line)
 
 		# Print useful information about filtering of SNPs
