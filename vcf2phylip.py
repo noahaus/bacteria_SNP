@@ -285,7 +285,9 @@ def main():
 			print("Biallelic SNPs selected for binary NEXUS: " + str(snp_biallelic))
 		print("")
 		print("list of excluded snps:")
+		
 		for i in range(len(malformed)):
+			print(i)
 			print(malformed[i])
 
 	vcf.close()
