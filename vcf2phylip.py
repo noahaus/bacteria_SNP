@@ -194,6 +194,7 @@ def main():
 		snp_shallow = 0
 		snp_multinuc = 0
 		snp_biallelic = 0
+		malformed = []
 		while 1:
 
 			# Load large chunks of file into memory
@@ -202,7 +203,7 @@ def main():
 				break
 
 			# Now process the SNPs one by one
-			malformed = []
+
 			for line in vcf_chunk:
 				if not line.startswith("#") and line.strip("\n") != "": # pyrad sometimes produces an empty line after the #CHROM line
 
@@ -285,7 +286,7 @@ def main():
 			print("Biallelic SNPs selected for binary NEXUS: " + str(snp_biallelic))
 		print("")
 		print("list of excluded snps:")
-		
+
 		for i in range(len(malformed)):
 			print(i)
 			print(malformed[i])
