@@ -285,12 +285,12 @@ def main():
 		if nexusbin:
 			print("Biallelic SNPs selected for binary NEXUS: " + str(snp_biallelic))
 		print("")
+
 		print("list of excluded snps:")
-
+		print("####")
 		for i in range(len(malformed)):
-			print(i)
 			print(malformed[i])
-
+		print("####")
 	vcf.close()
 	if fasta or nexus or not phylipdisable:
 		temporal.close()
