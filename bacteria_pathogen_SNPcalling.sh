@@ -7,6 +7,17 @@
 #PBS -M noahaus@uga.edu
 #PBS -m abe
 
+if [ -z "$PBS_O_WORKDIR" ]
+then
+  REF=$1
+  EMAIL=$2
+  #add modules the conda way
+else
+  REF=${reference}  #Variable for the reference genome. first argument
+  EMAIL=${email}  #Variable for the email you wish to get notifications from. second arguement
+  #add modules the Sapelo2 way
+fi
+
 #cd $PBS_O_WORKDIR
 echo "Bash version ${BASH_VERSION}..."
 #Let's start by creating the structure of the output folder.
@@ -38,9 +49,6 @@ cp *.fastq* -t $FASTQ
 #we will need these softwares provided by the cluster for step 1.
 module add BWA/0.7.17-foss-2016b
 module add SAMtools/1.9-foss-2016b
-
-REF=$1  #Variable for the reference genome. first argument
-EMAIL=$2  #Variable for the email you wish to get notifications from. second arguement
 
 #STEP 1: ALIGN TO REFERENCE GENOME
 python $STEP_1 $REF
