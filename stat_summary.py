@@ -47,8 +47,8 @@ os.system('touch read_stats.csv') #create the read_stats file
 os.system('echo "sample_name,R1_size(full),R2_size(full),Q_ave_R1,Q_ave_R2,R1_ave_read_length,R2_ave_read_length" >> read_stats.csv') #header of read_stats.csv
 for i in range(len(R1_list)):
     sample_name = R1_list[i].replace("_R1_001.fastq","")
-    output_R1 = R1_list[i].replace("_R1_001.fastq",".R1.stats.txt")
-    output_R2 = R2_list[i].replace("_R2_001.fastq",".R2.stats.txt")
+    output_R1 = R1_list[i].replace("_R1_001.fastq",".R1.stats.txt").replace("R1.fastq",".R1.stats.txt")
+    output_R2 = R2_list[i].replace("_R2_001.fastq",".R2.stats.txt").replace("R2.fastq",".R2.stats.txt")    
     generate_fastq_stats = "fastx_quality_stats -i {} -o {}"
     os.system(generate_fastq_stats.format(R1_list[i],output_R1))
     os.system(generate_fastq_stats.format(R2_list[i],output_R2))
@@ -62,7 +62,7 @@ for i in range(len(R1_list)):
     os.system("echo \"{},{},{},{},{},{},{}\" >> read_stats.csv".format(sample_name,R1_size.strip(),R2_size.strip(),Q_ave_R1.strip(),Q_ave_R2.strip(),R1_ave_read_length.strip(),R2_ave_read_length.strip()))
 
 os.system("mv read_stats.csv -t {}".format(stats_dir))
-os.system("rm *.R1.stats.txt *.R2.stats.txt")
+os.system("rm *.R1.stats.txt *.R2.stats.txt R_1.txt R_2.txt")
 os.chdir(bam_dir)
 
 os.system('ls | grep ".sorted.bam" > bam_call.txt')
@@ -83,6 +83,7 @@ for i in range(len(bam_list)):
     unmapped_reads = int(total_reads) - int(mapped_reads)    
     os.system("echo \"{},{},{}\" >> bam_stats.csv".format(mapped_reads,ave_coverage,unmapped_reads))
 os.system("mv bam_stats.csv -t {}".format(stats_dir))
+os.system("rm bam_call.txt")
 os.chdir(stats_dir)
 os.system("paste -d \",\" read_stats.csv bam_stats.csv > stat_summary.csv")
 print("DONE")
