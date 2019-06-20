@@ -269,12 +269,10 @@ def main():
 							snp_multinuc += 1
 							# Keep track of loci rejected due to exceeded missing data
 							snp_shallow += 1
-							print(line)
 							malformed.append(line)
 					else:
 						# Keep track of loci rejected due to exceeded missing data
 						snp_shallow += 1
-						print(line)
 						malformed.append(line)
 
 		# Print useful information about filtering of SNPs
@@ -286,11 +284,14 @@ def main():
 			print("Biallelic SNPs selected for binary NEXUS: " + str(snp_biallelic))
 		print("")
 
-		print("list of excluded snps:")
+		# For debugging, prints out the files that are expunged.
 		print("####")
+		print("list of excluded snps:")
 		for i in range(len(malformed)):
 			print(malformed[i])
 		print("####")
+		print("")
+
 	vcf.close()
 	if fasta or nexus or not phylipdisable:
 		temporal.close()
