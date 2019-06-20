@@ -195,6 +195,8 @@ def main():
 		snp_multinuc = 0
 		snp_biallelic = 0
 		malformed = []
+		os.system('touch malformed.out.txt')
+		out = open('malformed.out.txt','w')
 		while 1:
 
 			# Load large chunks of file into memory
@@ -284,14 +286,16 @@ def main():
 			print("Biallelic SNPs selected for binary NEXUS: " + str(snp_biallelic))
 		print("")
 
+
 		# For debugging, prints out the files that are expunged.
 		print("####")
 		print("list of excluded snps:")
 		for i in range(len(malformed)):
+			out.write(malformed[i])
 			print(malformed[i])
 		print("####")
 		print("")
-
+	out.close()
 	vcf.close()
 	if fasta or nexus or not phylipdisable:
 		temporal.close()
