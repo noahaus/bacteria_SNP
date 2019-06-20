@@ -29,6 +29,9 @@ STEP_2=$(pwd)/bacteria_SNP/remove_duplicates.py
 STEP_3=$(pwd)/bacteria_SNP/vcf2phylip.py
 STEP_5=$(pwd)/bacteria_SNP/stat_summary.py
 
+#path to created files from output.
+MALFORM=$(pwd)/bacteria_SNP/malformed.out.txt
+
 #create the output structure.
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
 
@@ -81,3 +84,5 @@ echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EM
 module add FASTX-Toolkit/0.0.14-foss-2016b
 python $STEP_5 $FASTQ $NODUP $STATS
 echo "Step 5 of pipeline complete" | mail -s "STEP 5: ALIGNMENT STATS" $EMAIL
+
+#STEP 6: SNP TABLE (CSV)
