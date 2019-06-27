@@ -72,6 +72,6 @@ line2 = ",".join(map(str, qual))
 os.system("echo "+line2+" >> snp_table.csv")
 
 for h in range(len(isolates)):
-    line3 = ",".join(map(str, sequence[h].split("")))
+    line3 = ",".join(map(str, list(sequence[h])))
     record = isolates[h]+","+line3
     os.system("echo "+record+" >> snp_table.csv")
