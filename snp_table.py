@@ -46,7 +46,9 @@ qual.append(" ")
 for j in range(len(header_list)):
     if("PASS" in header_list[j]):
         arr = header_list[j].split()
+        print(arr[0]+" "+arr[1])
         location.append(arr[0]+" "+arr[1])
+        print(arr[5])
         qual.append(arr[5])
 
 phy = sys.argv[3].strip()
