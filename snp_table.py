@@ -24,7 +24,7 @@ vcf_p_list = []
 for vcf_lines in vcf_p:
     vcf_p_list.append(vcf_lines)
 
-for i in range(vcf_p_list):
+for i in range(len(vcf_p_list)):
     if(vcf_p_list[i] in unif_list):
         continue
     else:
