@@ -39,9 +39,9 @@ STEP_1=$(pwd)/bacteria_SNP/pairread2sortBAM.py
 STEP_2=$(pwd)/bacteria_SNP/remove_duplicates.py
 STEP_3=$(pwd)/bacteria_SNP/vcf2phylip.py
 STEP_5=$(pwd)/bacteria_SNP/stat_summary.py
-
+STEP_6=$(pwd)/bacteria_SNP/snp_table.py
 #path to created files from output.
-MALFORM=$(pwd)/bacteria_SNP/malformed.out.txt
+
 
 #create the output structure.
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
@@ -76,9 +76,13 @@ bcftools call -Ou --ploidy 1 -mv temp.pileup.vcf > temp.raw.vcf
 mv temp.raw.vcf -t $RAW
 cd $RAW
 bcftools filter -s LowQual -e '%QUAL<20 || TYPE="indel"' temp.raw.vcf > output.filter.vcf
-python $STEP_3 -i output.filter.vcf
+grep -v "LowQual" output.filter.vcf > output.pass_only.vcf
+python $STEP_3 -i output.pass_only.vcf
+PASS_ONLY=$(pwd)/output.pass_only.vcf
+MALFORM=$(pwd)/malformed.out.txt
 PHY=$(ls | grep ".phy")
-mv output.filter.vcf $PHY -t $FILTER
+FULL_PHY=$(pwd)/$PHY
+mv output.pass_only.vcf $PHY -t $FILTER
 echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 
 #STEP 4: RAxML TREE GENERATION
@@ -94,3 +98,5 @@ python $STEP_5 $FASTQ $NODUP $STATS
 echo "Step 5 of pipeline complete" | mail -s "STEP 5: ALIGNMENT STATS" $EMAIL
 
 #STEP 6: SNP TABLE (CSV)
+python $STEP_6 $MALFORM $PASS_ONLY $FULL_PHY
+echo "Step 6 of pipeline complete" | mail -s "STEP 6: SNP TABLE (CSV)" $EMAIL
