@@ -53,7 +53,7 @@ CALL_SNP=$(pwd)/bacteria_SNP/call_snp.py
 CHROM=$(pwd)/bacteria_SNP/create_chrom.py
 
 #create the output structure.
-mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML $FASTQ
+mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML $FASTQ $STATS
 
 #move our fastq samples from the current working directory into the FASTQ folder. this way we always have a way to access our original data
 cp *.fastq* -t $FASTQ
@@ -85,7 +85,7 @@ echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 #STEP 4: RAxML TREE GENERATION
 #A basic ML tree for the analysis, can show evolutionary relationship based on nucleotide substitution model.
 cd $PILEUP
-MERGE=$(pwd)/merged.vcf
+MERGE=$(pwd)/output.merged.vcf
 python $STEP_3 -i $MERGE
 PHY=$(ls | grep "merged.*.vcf")
 mpirun raxmlHPC-MPI-AVX -s $PHY -n isolates -m GTRGAMMA -N 100 -p 1000
