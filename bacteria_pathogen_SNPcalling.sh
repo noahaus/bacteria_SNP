@@ -13,6 +13,13 @@ then
   REF=$1 #Variable for the reference genome. first argument
   EMAIL=$2 #Variable for the email you wish to get notifications from. second arguement
   #if you source activate the associated conda environment, then everything should run just fine.
+  module add BWA/0.7.17-foss-2016b
+  module add SAMtools/1.9-foss-2016b
+  module add picard/2.16.0-Java-1.8.0_144
+  module add BCFtools/1.9-foss-2016b
+  module add freebayes/1.2.0
+  module add RAxML/8.2.11-foss-2016b-mpi-avx
+  module add FASTX-Toolkit/0.0.14-foss-2016b
 else
   REF=${reference}  #Variable for the reference genome. first argument
   EMAIL=${email}  #Variable for the email you wish to get notifications from. second arguement
