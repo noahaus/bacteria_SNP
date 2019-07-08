@@ -48,7 +48,7 @@ os.system('echo "sample_name,R1_size(full),R2_size(full),Q_ave_R1,Q_ave_R2,R1_av
 for i in range(len(R1_list)):
     sample_name = R1_list[i].replace("_R1_001.fastq","")
     output_R1 = R1_list[i].replace("_R1_001.fastq",".R1.stats.txt").replace("R1.fastq",".R1.stats.txt")
-    output_R2 = R2_list[i].replace("_R2_001.fastq",".R2.stats.txt").replace("R2.fastq",".R2.stats.txt")    
+    output_R2 = R2_list[i].replace("_R2_001.fastq",".R2.stats.txt").replace("R2.fastq",".R2.stats.txt")
     generate_fastq_stats = "fastx_quality_stats -i {} -o {}"
     os.system(generate_fastq_stats.format(R1_list[i],output_R1))
     os.system(generate_fastq_stats.format(R2_list[i],output_R2))
@@ -58,14 +58,14 @@ for i in range(len(R1_list)):
     Q_ave_R1 = sp.check_output("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R1),shell=True).decode('ascii')
     Q_ave_R2 = sp.check_output("cat {} | sed \"1d\" | awk '{{sum+=$6}} END{{print sum/NR}}'".format(output_R2),shell=True).decode('ascii')
     R1_ave_read_length = sp.check_output("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R1_list[i]),shell=True).decode('ascii')
-    R2_ave_read_length = sp.check_output("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R2_list[i]),shell=True).decode('ascii')    
+    R2_ave_read_length = sp.check_output("awk '{{if(NR%4==2) {{count++; bases += length}} }} END{{print bases/count}}' {}".format(R2_list[i]),shell=True).decode('ascii')
     os.system("echo \"{},{},{},{},{},{},{}\" >> read_stats.csv".format(sample_name,R1_size.strip(),R2_size.strip(),Q_ave_R1.strip(),Q_ave_R2.strip(),R1_ave_read_length.strip(),R2_ave_read_length.strip()))
 
 os.system("mv read_stats.csv -t {}".format(stats_dir))
 os.system("rm *.R1.stats.txt *.R2.stats.txt R_1.txt R_2.txt read_stats.csv")
 os.chdir(bam_dir)
 
-os.system('ls | grep ".sorted.bam" > bam_call.txt')
+os.system('ls | grep ".sorted.bam" | grep -v ".bai" > bam_call.txt')
 bam = open("bam_call.txt", "r")
 
 bam_list = []
@@ -80,7 +80,7 @@ for i in range(len(bam_list)):
     ave_coverage = sp.check_output("samtools depth {} | awk '{{sum+=$3}} END {{ print sum/NR}}'".format(bam_list[i]),shell=True).decode('ascii').strip()
     total_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==1 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii').strip()
     mapped_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==5 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii').strip()
-    unmapped_reads = int(total_reads) - int(mapped_reads)    
+    unmapped_reads = int(total_reads) - int(mapped_reads)
     os.system("echo \"{},{},{}\" >> bam_stats.csv".format(mapped_reads,ave_coverage,unmapped_reads))
 os.system("mv bam_stats.csv -t {}".format(stats_dir))
 os.system("rm bam_call.txt")
