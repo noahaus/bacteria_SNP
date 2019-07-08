@@ -53,7 +53,7 @@ CALL_SNP=$(pwd)/bacteria_SNP/call_snp.py
 CHROM=$(pwd)/bacteria_SNP/create_chrom.py
 
 #create the output structure.
-mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML
+mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML $FASTQ
 
 #move our fastq samples from the current working directory into the FASTQ folder. this way we always have a way to access our original data
 cp *.fastq* -t $FASTQ
