@@ -92,9 +92,9 @@ echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 #STEP 4: RAxML TREE GENERATION
 #A basic ML tree for the analysis, can show evolutionary relationship based on nucleotide substitution model.
 cd $PILEUP
-MERGE=$(pwd)/output.merged.vcf
+MERGE=$(pwd)/output.merge.vcf
 python $STEP_3 -i $MERGE
-PHY=$(ls | grep "merged.*.vcf")
+PHY=$(ls | grep "merge.*.vcf")
 mpirun raxmlHPC-MPI-AVX -s $PHY -n isolates -m GTRGAMMA -N 100 -p 1000
 mv *.isolates.*  *.isolates -t $RAXML
 echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EMAIL
