@@ -65,7 +65,7 @@ os.system("mv read_stats.csv -t {}".format(stats_dir))
 os.system("rm *.R1.stats.txt *.R2.stats.txt R_1.txt R_2.txt read_stats.csv")
 os.chdir(bam_dir)
 
-os.system('ls | grep ".sorted.bam" | grep -v ".bai" > bam_call.txt')
+os.system('ls | grep ".addsample.bam" | grep -v ".bai" > bam_call.txt')
 bam = open("bam_call.txt", "r")
 
 bam_list = []
