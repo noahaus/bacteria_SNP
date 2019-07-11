@@ -22,6 +22,7 @@ for line in bam:
 
 print("indexing the bam files (if necessary)")
 os.system("rm samp_list.txt")
+os.system("touch samp_list.txt")
 for i in range(len(bam_list)):
     output = bam_list[i].replace(".nodup.sorted.bam",".addsample.bam")
     sm = bam_list[i].replace(".nodup.sorted.bam","")
