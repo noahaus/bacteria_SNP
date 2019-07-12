@@ -7,7 +7,13 @@
 
 import sys # use to access arguments
 import os # use in order to call commands from terminal script is called in
-
+"""
+We start by assuming that you possess reads and also a reliable reference genome to align.
+We should align to the genome because otherwise the reads we have are just individual blocks of sequence;
+how should they relate to each other? BAM files are used to delineate this relationship between reads
+and where the read maps to on the reference genome. After successful mapping, we are not guaranteed that
+your reads are in the proper order. For downstream analysis, it is best to sort the mapped reads within the BAM file.
+"""
 
 #use this python script in the directory you wish to analyze fastq files in
 

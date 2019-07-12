@@ -5,6 +5,18 @@
 #dates edited:
 #purpose: use freebayes-parallel software to call high quality snps.
 
+"""The most time consuming of these steps is the process of finding what is a SNP and what is not.
+First, we look at every shared position from the isolate sample and then
+determine if the depth of nucleotides found in that position from the BAM file constitutes proof of a variant.
+Then we have a candidate for a consensus SNP! We record these potential SNPs in a file format known as VCF,
+which contains information on genome position and also type of variant displayed. However, the quality of SNP calls varies, so by placing rigid criteria for the type of SNPs we
+wish to study through caveats and rules (hard filtering), we end up with a VCF file that has SNPs that the researcher feels comfortable with.
+
+After creating the hard filtered VCFs for each isolate, we can intersect all these
+VCF files to only keep the SNPs that are common in all isolates. After every file has been intersected, we merge them into one VCF file separated by isolates, 
+making it easy to create files that can be used to create phylogenetic trees.
+ """
+
 import sys # use to access arguments
 import os # use in order to call commands from the terminal script is called in
 
