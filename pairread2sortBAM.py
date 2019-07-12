@@ -7,6 +7,7 @@
 
 import sys # use to access arguments
 import os # use in order to call commands from terminal script is called in
+import re # regular expressions
 """
 We start by assuming that you possess reads and also a reliable reference genome to align.
 We should align to the genome because otherwise the reads we have are just individual blocks of sequence;
@@ -20,14 +21,14 @@ your reads are in the proper order. For downstream analysis, it is best to sort 
 ref_genome = sys.argv[1].strip()
 
 #index the reference genome
-print("indexing "+ ref_genome)
+print("INDEXING: "+ ref_genome)
 os.system('bwa index '+ref_genome)
-
+print("\n\n\n")
 #gunzip everything in the temp_folder
-print("unzipping files if needed")
+print("UNZIPPING FILES")
 os.system('gunzip -r ./')
-print("files unzipped")
-
+print("FILES UNZIPPED.")
+print("\n\n\n")
 #separate the paired reads in the directory
 os.system('ls | grep "R1" > R_1.txt')
 os.system('ls | grep "R2" > R_2.txt')
@@ -50,9 +51,10 @@ for R2_line in R2:
 
 #in the loop, we can now align each paired read file individually to the reference genome fasta file.
 for i in range(len(R1_list)):
-    output_pre = R1_list[i].replace("_R1_001","")
+    output_pre = re.sub(".R1.*.fastq","",R1_list[i])
     print("aligning "+output_pre.strip()+"files")
-    os.system("bwa mem -M -t 4 "+ref_genome+" "+R1_list[i]+" "+R2_list[i]+" | samtools sort -@4 -o "+output_pre+".sorted.bam > output.quiet.log")
+    os.system("time java -jar /usr/local/apps/eb/Trimmomatic/0.36-Java-1.8.0_144/trimmomatic-0.36.jar PE -threads 4 -phred33 -trimlog trimlog.txt {} {} {} {} {} {} ILLUMINACLIP:/usr/local/apps/eb/Trimmomatic/0.36-Java-1.8.0_144/adapters/NexteraPE-PE.fa:2:30:10 SLIDINGWINDOW:4:20  MINLEN:25".format(R1_list[i],R2_list[i],output_pre+".R1.trimmed.fastq",output_pre+".unmapped.R1",output_pre+".R2.trimmed.fastq",output_pre+".unmapped.R2"))
+    os.system("bwa mem -M -t 4 "+ref_genome+" "+output_pre+".R1.trimmed.fastq "+output_pre+".R2.trimmed.fastq | samtools sort -@4 -o "+output_pre+".sorted.bam > output.quiet.log")
 
 print("Sorted BAM files created and ready to be moved")
 os.system("rm R_1.txt R_2.txt output.quiet.log")

@@ -20,6 +20,7 @@ then
   module add freebayes/1.2.0
   module add RAxML/8.2.11-foss-2016b-mpi-avx
   module add FASTX-Toolkit/0.0.14-foss-2016b
+  module add Trimmomatic/0.36-Java-1.8.0_144
 else
   REF=${reference}  #Variable for the reference genome. first argument
   EMAIL=${email}  #Variable for the email you wish to get notifications from. second arguement
@@ -31,6 +32,7 @@ else
   module add freebayes/1.2.0
   module add RAxML/8.2.11-foss-2016b-mpi-avx
   module add FASTX-Toolkit/0.0.14-foss-2016b
+  module add Trimmomatic/0.36-Java-1.8.0_144
 fi
 
 echo "Bash version ${BASH_VERSION}..."
@@ -68,10 +70,11 @@ cp *.fastq* -t $FASTQ
 #STEP 1: ALIGN TO REFERENCE GENOME
 #We should have files separated by R1 and R2. exploit this fact in order to proceed
 #with mapping to the reference genome you provide.
+cd $FASTQ
 python $STEP_1 $REF
 mv *.sorted.bam -t $BASIC
 cd $BASIC
-echo "Step 1 of pipeline complete" | mail -s "STEP 1: ALIGN TO REFERENCE GENOME" $EMAIL
+echo "Step 1 of pipeline complete" | mail -s "STEP 1: READ QUALITY TRIMMING AND ALIGN TO REFERENCE GENOME" $EMAIL
 
 #STEP 2: REMOVE DUPLICATE READS
 #This step ensures that no reads that are the result of PCR duplication and are non informative
