@@ -12,7 +12,7 @@ ref_genome = sys.argv[1].strip()
 pileup = sys.argv[2].strip()
 #create a file that lists all the bam files in sorted orderself.
 #will be used for indexing and also basecalling shortly thereafter.
-os.system('ls | grep "nodup.sorted.bam" > bam_list.txt')
+os.system('ls | grep "nodup.sorted.bam$" > bam_list.txt')
 
 bam_list = []
 bam = open('bam_list.txt','r')
@@ -60,7 +60,7 @@ os.system("bcftools isec -p {} -n={} {}".format(pileup,len(samp_list),intersect_
 print("INTESECTING ALL VCFs: bcftools isec -p {} -n={} {}".format(pileup,len(samp_list),intersect_isolates))
 os.chdir(pileup)
 os.system('rm vcf_list.txt')
-os.system('ls | grep ".vcf" > vcf_list.txt')
+os.system('ls | grep ".vcf$" > vcf_list.txt')
 
 vcf_list = []
 vcf = open('vcf_list.txt','r')
