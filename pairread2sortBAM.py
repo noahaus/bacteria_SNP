@@ -56,6 +56,6 @@ for i in range(len(R1_list)):
     os.system("time java -jar /usr/local/apps/eb/Trimmomatic/0.36-Java-1.8.0_144/trimmomatic-0.36.jar PE -threads 4 -phred33 -trimlog trimlog.txt {} {} {} {} {} {} ILLUMINACLIP:/usr/local/apps/eb/Trimmomatic/0.36-Java-1.8.0_144/adapters/NexteraPE-PE.fa:2:30:10 SLIDINGWINDOW:4:20  MINLEN:25".format(R1_list[i],R2_list[i],output_pre+".R1.trimmed.fastq",output_pre+".unmapped.R1",output_pre+".R2.trimmed.fastq",output_pre+".unmapped.R2"))
     os.system("bwa mem -M -t 4 "+ref_genome+" "+output_pre+".R1.trimmed.fastq "+output_pre+".R2.trimmed.fastq | samtools sort -@4 -o "+output_pre+".sorted.bam > output.quiet.log")
 
-print("Sorted BAM files created and ready to be moved")
+print("BAM FILES CREATED")
 os.system("rm R_1.txt R_2.txt output.quiet.log")
-print("DONE")
+print("\n\n\n")
