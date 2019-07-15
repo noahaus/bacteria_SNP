@@ -46,7 +46,7 @@ for i in range(len(bam_list)):
     os.system("samtools index {}".format(output))
 
 samp_list = []
-samp = open(samp_list.txt',r)
+samp = open('samp_list.txt','r')
 
 for line in samp:
     samp_list.append(line.strip())
