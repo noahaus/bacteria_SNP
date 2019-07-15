@@ -5,7 +5,7 @@
 #dates edited:
 #purpose: use freebayes-parallel software to call high quality snps.
 
-"""The most time consuming of these steps is the process of finding what is a SNP and what is not.
+print("""The most time consuming of these steps is the process of finding what is a SNP and what is not.
 First, we look at every shared position from the isolate sample and then
 determine if the depth of nucleotides found in that position from the BAM file constitutes proof of a variant.
 Then we have a candidate for a consensus SNP! We record these potential SNPs in a file format known as VCF,
@@ -13,9 +13,9 @@ which contains information on genome position and also type of variant displayed
 wish to study through caveats and rules (hard filtering), we end up with a VCF file that has SNPs that the researcher feels comfortable with.
 
 After creating the hard filtered VCFs for each isolate, we can intersect all these
-VCF files to only keep the SNPs that are common in all isolates. After every file has been intersected, we merge them into one VCF file separated by isolates, 
+VCF files to only keep the SNPs that are common in all isolates. After every file has been intersected, we merge them into one VCF file separated by isolates,
 making it easy to create files that can be used to create phylogenetic trees.
- """
+ """)
 
 import sys # use to access arguments
 import os # use in order to call commands from the terminal script is called in
@@ -46,7 +46,7 @@ for i in range(len(bam_list)):
     os.system("samtools index {}".format(output))
 
 samp_list = []
-samp = open('samp_list.txt','r')
+samp = open(samp_list.txt',r)
 
 for line in samp:
     samp_list.append(line.strip())
@@ -59,7 +59,7 @@ for i in range(len(samp_list)):
     print("SNP CALLING: freebayes-parallel chrom_ranges.txt 8 -E -1 -e 1 -u --strict-vcf -f {}  {} > {}".format(ref_genome.strip(),samp_list[i],raw_output))
     os.system("freebayes-parallel chrom_ranges.txt 8 -E -1 -e 1 -u --strict-vcf -f {}  {} > {}".format(ref_genome.strip(),samp_list[i],raw_output))
     filtered_output = samp_list[i].replace(".addsample.bam",".filtered.vcf")
-    print("HARD FILTERING: bcftools filter -s LowQual -i '%QUAL>150 && TYPE=\"snp\" && INFO/DP > 10' {} > {}".format(raw_output,filtered_output))
+    print("HARD FILTERING: bcftools filter -s LowQual -i %QUAL>150 && TYPE=\"snp\" && INFO/DP > 10 {} > {}".format(raw_output,filtered_output))
     os.system("bcftools filter -s LowQual -i '%QUAL>150 && TYPE=\"snp\" && INFO/DP > 10' {} > {}".format(raw_output,filtered_output))
     pass_output = samp_list[i].replace(".addsample.bam",".only_pass.vcf")
     os.system("grep -v \"LowQual\" {} > {}".format(filtered_output,pass_output))
