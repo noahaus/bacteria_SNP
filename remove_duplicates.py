@@ -23,6 +23,7 @@ for line in bam:
     bam_list.append(line.strip())
 
 #remove the duplicates one by one
+print("\nREMOVING ALL DUPLICATES\n")
 for i in range(len(bam_list)):
     input = bam_list[i]
     output = bam_list[i].replace(".sorted.bam",".nodup.sorted.bam")
@@ -30,6 +31,4 @@ for i in range(len(bam_list)):
     print(input)
     os.system("java -jar $EBROOTPICARD/picard.jar MarkDuplicates INPUT="+input+" OUTPUT="+output+" METRICS_FILE="+output_pre+".metric.txt REMOVE_SEQUENCING_DUPLICATES=true REMOVE_DUPLICATES=true")
 
-
-print("non duplicate BAM files created and ready to be moved")
-print("DONE")
+print("\nNON DUPLICATE FILES CREATED\n")
