@@ -16,7 +16,7 @@ for record in SeqIO.parse(ref_genome, "fasta"):
     step = 100000
     if step < total_len:
         for chunk in range(min_number, total_len, step)[1:]:
-            print("{}:{}-{}".format(chrom, min_number, chunk), file=chrom_ranges)
+            chrom_ranges.write("{}:{}-{}".format(chrom, min_number, chunk))
             min_number = chunk
-    print("{}:{}-{}".format(chrom, min_number, total_len), file=chrom_ranges)
+    chrom_ranges.write("{}:{}-{}".format(chrom, min_number, total_len))
 chrom_ranges.close()
