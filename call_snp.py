@@ -71,7 +71,7 @@ for i in range(len(samp_list)):
 os.system("bcftools isec -p {} -n={} {}".format(pileup,len(samp_list),intersect_isolates))
 print("INTESECTING ALL VCFs: bcftools isec -p {} -n={} {}".format(pileup,len(samp_list),intersect_isolates))
 os.chdir(pileup)
-os.system('rm vcf_list.txt')
+os.system('rm output.merge.vcf.gz output.merge.vcf vcf_list.txt')
 os.system('ls | grep ".vcf$" > vcf_list.txt')
 
 vcf_list = []
