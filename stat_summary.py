@@ -19,14 +19,15 @@ stats_dir = sys.argv[3].strip()
 #STEP 1: fastq stats generation.
 #gunzip everything in the temp_folder
 os.chdir(fastq_dir)
+os.system('rm read_stats.csv')
 os.system("echo $(pwd)")
-print("unzipping files if needed")
+print("UNZIPPING FILES *if needed\n\n")
 os.system('gunzip -r ./')
-print("files unzipped")
+print("FILES UNZIPPED")
 
 #separate the pair reads into two files
-os.system('ls | grep \'R1\' > R_1.txt')
-os.system('ls | grep \'R2\' > R_2.txt')
+os.system('ls | grep \'R1.trimmed.fastq\' > R_1.txt')
+os.system('ls | grep \'R2.trimmed.fastq\' > R_2.txt')
 
 #let's put the file names in a list data structure.
 R1 = open("R_1.txt", "r")
@@ -46,9 +47,9 @@ for R2_line in R2:
 os.system('touch read_stats.csv') #create the read_stats file
 os.system('echo "sample_name,R1_size(full),R2_size(full),Q_ave_R1,Q_ave_R2,R1_ave_read_length,R2_ave_read_length" >> read_stats.csv') #header of read_stats.csv
 for i in range(len(R1_list)):
-    sample_name = R1_list[i].replace("_R1_001.fastq","")
-    output_R1 = R1_list[i].replace("_R1_001.fastq",".R1.stats.txt").replace("R1.fastq",".R1.stats.txt")
-    output_R2 = R2_list[i].replace("_R2_001.fastq",".R2.stats.txt").replace("R2.fastq",".R2.stats.txt")
+    sample_name = re.sub(".R1.trimmed.fastq","",R1_list[i])
+    output_R1 = re.sub(".R1.trimmed.fastq",".R1.stats.txt",R1_list[i])
+    output_R2 = re.sub(".R2.trimmed.fastq",".R2.stats.txt",R2_list[i])
     generate_fastq_stats = "fastx_quality_stats -i {} -o {}"
     os.system(generate_fastq_stats.format(R1_list[i],output_R1))
     os.system(generate_fastq_stats.format(R2_list[i],output_R2))
@@ -65,7 +66,7 @@ os.system("mv read_stats.csv -t {}".format(stats_dir))
 os.system("rm *.R1.stats.txt *.R2.stats.txt R_1.txt R_2.txt read_stats.csv")
 os.chdir(bam_dir)
 
-os.system('ls | grep ".addsample.bam" | grep -v ".bai" > bam_call.txt')
+os.system('ls | grep ".addsample.bam$" > bam_call.txt')
 bam = open("bam_call.txt", "r")
 
 bam_list = []
@@ -76,7 +77,7 @@ for line in bam:
 os.system('touch bam_stats.csv')
 os.system('echo "total_mapped_reads,ave_coverage,unmapped_reads" >> bam_stats.csv')
 for i in range(len(bam_list)):
-    print("viewing {}".format(bam_list[i]))
+    print("VIEWING {}".format(bam_list[i]))
     ave_coverage = sp.check_output("samtools depth {} | awk '{{sum+=$3}} END {{ print sum/NR}}'".format(bam_list[i]),shell=True).decode('ascii').strip()
     total_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==1 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii').strip()
     mapped_reads = sp.check_output("samtools flagstat {} | awk -F '[ ]' 'NR==5 {{print $1}}'".format(bam_list[i]),shell=True).decode('ascii').strip()
