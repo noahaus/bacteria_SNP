@@ -7,6 +7,7 @@
 
 import sys # use to access arguments
 import os # use in order to call commands from terminal script is called in
+import re # regular expressions.
 import subprocess as sp
 
 #this program will create the stats files that data will be extracted from.
