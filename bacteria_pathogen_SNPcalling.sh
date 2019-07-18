@@ -73,20 +73,20 @@ cp *.fastq* -t $FASTQ
 cd $FASTQ
 python $STEP_1 $REF
 mv *.sorted.bam -t $BASIC
-cd $BASIC
 echo "Step 1 of pipeline complete" | mail -s "STEP 1: READ QUALITY TRIMMING AND ALIGN TO REFERENCE GENOME" $EMAIL
 
 #STEP 2: REMOVE DUPLICATE READS
 #This step ensures that no reads that are the result of PCR duplication and are non informative
 #do not complicate further downstream analysis.
+cd $BASIC
 python $STEP_2
 mv *.nodup.sorted.bam -t $NODUP
-cd $NODUP
 echo "Step 2 of pipeline complete" | mail -s "STEP 2: REMOVE DUPLICATE READS" $EMAIL
 
 #STEP 3: VARIANT CALLING
 #For each sample, use freebayes to call SNPs based on the reference genome.
 #perform hard filtering to improve the confidence in SNPs that we find.
+cd $NODUP
 python $CHROM $REF #We use freebayes-parallel in this pipeline, and in order to do that, we need to break up the reference genome into ranges.
 python $CALL_SNP $REF $PILEUP
 mv *unfiltered.vcf -t $RAW; mv *.filtered.vcf *only_pass.vcf -t $FILTER;
