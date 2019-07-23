@@ -59,7 +59,7 @@ for i in range(len(samp_list)):
     print("SNP CALLING: freebayes-parallel chrom_ranges.txt 8 -E -1 -e 1 -u --strict-vcf -f {}  {} > {}".format(ref_genome.strip(),samp_list[i],raw_output))
     os.system("freebayes-parallel chrom_ranges.txt 8 -E -1 -e 1 -u --strict-vcf -f {}  {} > {}".format(ref_genome.strip(),samp_list[i],raw_output))
     filtered_output = samp_list[i].replace(".addsample.bam",".filtered.vcf")
-    print("HARD FILTERING: bcftools filter -s LowQual -i %QUAL>150 && TYPE=\"snp\" && INFO/DP > 10 {} > {}".format(raw_output,filtered_output))
+    print("HARD FILTERING: bcftools filter -s LowQual -i ''%QUAL>150 && TYPE=\"snp\" && INFO/DP' > 10 {} > {}".format(raw_output,filtered_output))
     os.system("bcftools filter -s LowQual -i '%QUAL>150 && TYPE=\"snp\" && INFO/DP > 10' {} > {}".format(raw_output,filtered_output))
     pass_output = samp_list[i].replace(".addsample.bam",".only_pass.vcf")
     os.system("grep -v \"LowQual\" {} > {}".format(filtered_output,pass_output))
