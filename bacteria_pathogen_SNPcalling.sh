@@ -14,7 +14,7 @@
   module add picard/2.16.0-Java-1.8.0_144
   module add BCFtools/1.9-foss-2016b
   module add freebayes/1.2.0
-  module add RAxML/8.2.11-foss-2016b-mpi-avx
+  module add RAxML/8.2.11-foss-2016b-sse
   module add FASTX-Toolkit/0.0.14-foss-2016b
   module add Trimmomatic/0.36-Java-1.8.0_144
 
@@ -84,7 +84,7 @@ echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 cd $PILEUP
 MERGE=$(pwd)/output.merge.vcf
 python $STEP_3 -i $MERGE
-PHY=$(ls | grep "merge.*.phy$")
+PHY=$(ls | grep "output.merge.*.phy$")
 raxmlHPC-SSE3 -m GTRGAMMA -p 1234 -N 30 -s $PHY -n isolates
 raxmlHPC-SSE3 -m GTRGAMMA -p 1234 -b 1234 -N 100 -s $PHY -n isolates.bootstrap
 raxmlHPC-SSE3 -m GTRCAT -p 1234 -f b -t RAxML_bestTree.isolates -z RAxML_bootstrap.isolates.bootstrap -n isolates.confidence
@@ -100,5 +100,5 @@ echo "Step 5 of pipeline complete" | mail -s "STEP 5: ALIGNMENT STATS" $EMAIL
 
 #STEP 6: SNP TABLE (CSV)
 #A csv file that shows the isolates on the rows, and the SNP sites (with associated QUAL scores) in the columns.
-python $STEP_6 $MALFORM $PASS_ONLY $PHY
+python $STEP_6 $PHY $MERGE
 echo "Step 6 of pipeline complete" | mail -s "STEP 6: SNP TABLE (CSV)" $EMAIL
