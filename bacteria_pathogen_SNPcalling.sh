@@ -1,18 +1,14 @@
 #PBS -S /bin/bash
 #PBS -q batch
-#PBS -N BWA_align_and_Sort_BAM
-#PBS -l nodes=1:ppn=4:AMD
-#PBS -l walltime=72:00:00
-#PBS -l mem=16gb
+#PBS -N SalvadorSNPCalling
+#PBS -l nodes=4:ppn=4:AMD
+#PBS -l walltime=48:00:00
+#PBS -l mem=20gb
 #PBS -M noahaus@uga.edu
 #PBS -m abe
 
 #are we working in bash, or the Sapelo2 (University of Georgia specific) cluster?
-if [ -z "$PBS_O_WORKDIR" ]
-then
-  REF=$1 #Variable for the reference genome. first argument
-  EMAIL=$2 #Variable for the email you wish to get notifications from. second arguement
-  #if you source activate the associated conda environment, then everything should run just fine.
+
   module add BWA/0.7.17-foss-2016b
   module add SAMtools/1.9-foss-2016b
   module add picard/2.16.0-Java-1.8.0_144
@@ -21,19 +17,10 @@ then
   module add RAxML/8.2.11-foss-2016b-mpi-avx
   module add FASTX-Toolkit/0.0.14-foss-2016b
   module add Trimmomatic/0.36-Java-1.8.0_144
-else
+
   REF=${reference}  #Variable for the reference genome. first argument
   EMAIL=${email}  #Variable for the email you wish to get notifications from. second arguement
   #add modules the Sapelo2 way
-  module add BWA/0.7.17-foss-2016b
-  module add SAMtools/1.9-foss-2016b
-  module add picard/2.16.0-Java-1.8.0_144
-  module add BCFtools/1.9-foss-2016b
-  module add freebayes/1.2.0
-  module add RAxML/8.2.11-foss-2016b-mpi-avx
-  module add FASTX-Toolkit/0.0.14-foss-2016b
-  module add Trimmomatic/0.36-Java-1.8.0_144
-fi
 
 echo "Bash version ${BASH_VERSION}..."
 
@@ -97,8 +84,10 @@ echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 cd $PILEUP
 MERGE=$(pwd)/output.merge.vcf
 python $STEP_3 -i $MERGE
-PHY=$(ls | grep "merge.*.vcf")
-mpirun raxmlHPC-MPI-AVX -s $PHY -n isolates -m GTRGAMMA -N 100 -p 1000
+PHY=$(ls | grep "merge.*.phy$")
+raxmlHPC-SSE3 -m GTRGAMMA -p 1234 -N 30 -s $PHY -n isolates
+raxmlHPC-SSE3 -m GTRGAMMA -p 1234 -b 1234 -N 100 -s $PHY -n isolates.bootstrap
+raxmlHPC-SSE3 -m GTRCAT -p 1234 -f b -t RAxML_bestTree.isolates -z RAxML_bootstrap.isolates.bootstrap -n isolates.confidence
 mv *.isolates.*  *.isolates -t $RAXML
 echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EMAIL
 

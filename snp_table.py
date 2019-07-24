@@ -8,15 +8,10 @@
 import sys # use to access arguments
 import os # use in order to call commands from terminal script is called in
 
-uninform = sys.argv[1].strip()
+phy = sys.argv[1].strip()
 vcf = sys.argv[2].strip()
-os.system("touch output.inform.vcf")
-out = open("output.inform.vcf","w")
-unif = open(uninform, "r")
-unif_list = []
 
-for unif_lines in unif:
-    unif_list.append(unif_lines)
+
 
 vcf_p = open(vcf, "r")
 vcf_p_list = []
@@ -24,34 +19,22 @@ vcf_p_list = []
 for vcf_lines in vcf_p:
     vcf_p_list.append(vcf_lines)
 
-for i in range(len(vcf_p_list)):
-    if(vcf_p_list[i] in unif_list):
-        continue
-    else:
-        out.write(vcf_p_list[i])
-out.close()
-
-header = open("output.inform.vcf","r")
-header_list = []
-for header_lines in header:
-    header_list.append(header_lines)
 
 os.system("touch snp_table.csv")
-csv_out = open("snp_table.csv","w")
 
 location = []
 location.append(" ")
 qual = []
 qual.append(" ")
-for j in range(len(header_list)):
-    if("\tPASS\t" in header_list[j]):
-        arr = header_list[j].split()
+
+for j in range(len(vcf_p_list)):
+    if("\tPASS\t" in vcf_p_list[j]):
+        arr = vcf_p_list[j].split()
         print(arr[0]+" "+arr[1])
         location.append(arr[0]+" "+arr[1])
         print(arr[5])
         qual.append(arr[5])
 
-phy = sys.argv[3].strip()
 phy_out = open(phy, "r")
 
 phy_list = []
