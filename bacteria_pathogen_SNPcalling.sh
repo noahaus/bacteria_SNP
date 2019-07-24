@@ -9,17 +9,17 @@
 
 #are we working in bash, or the Sapelo2 (University of Georgia specific) cluster?
 
-  module add BWA/0.7.17-foss-2016b
-  module add SAMtools/1.9-foss-2016b
-  module add picard/2.16.0-Java-1.8.0_144
-  module add BCFtools/1.9-foss-2016b
-  module add freebayes/1.2.0
-  module add RAxML/8.2.11-foss-2016b-sse
-  module add FASTX-Toolkit/0.0.14-foss-2016b
-  module add Trimmomatic/0.36-Java-1.8.0_144
+module add BWA/0.7.17-foss-2016b
+module add SAMtools/1.9-foss-2016b
+module add picard/2.16.0-Java-1.8.0_144
+module add BCFtools/1.9-foss-2016b
+module add freebayes/1.2.0
+module add RAxML/8.2.11-foss-2016b-sse
+module add FASTX-Toolkit/0.0.14-foss-2016b
+module add Trimmomatic/0.36-Java-1.8.0_144
 
-  REF= $1 #${reference}  #Variable for the reference genome. first argument
-  EMAIL= $2 #${email}  #Variable for the email you wish to get notifications from. second arguement
+REF= $1 #${reference}  #Variable for the reference genome. first argument
+EMAIL= $2 #${email}  #Variable for the email you wish to get notifications from. second arguement
   #add modules the Sapelo2 way
 
 echo "Bash version ${BASH_VERSION}..."
