@@ -84,7 +84,7 @@ echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 cd $PILEUP
 MERGE=$(pwd)/output.merge.vcf
 python $STEP_3 -i $MERGE
-PHY=$(ls | grep "output.merge.*.phy$")
+PHY=$(pwd)/$(ls | grep "output.merge.*.phy$")
 raxmlHPC-SSE3 -m GTRGAMMA -p 1234 -N 30 -s $PHY -n isolates
 raxmlHPC-SSE3 -m GTRGAMMA -p 1234 -b 1234 -N 100 -s $PHY -n isolates.bootstrap
 raxmlHPC-SSE3 -m GTRCAT -p 1234 -f b -t RAxML_bestTree.isolates -z RAxML_bootstrap.isolates.bootstrap -n isolates.confidence
