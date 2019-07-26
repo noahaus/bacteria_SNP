@@ -19,9 +19,17 @@ module add FASTX-Toolkit/0.0.14-foss-2016b
 module add Trimmomatic/0.36-Java-1.8.0_144
 module add Biopython/1.70-foss-2016b-Python-2.7.14
 
-REF=$1  #Variable for the reference genome. first argument
-EMAIL=$2  #Variable for the email you wish to get notifications from. second arguement
+if [ -Z "$PBS_O_WORKDIR"]
+then
+  echo "using local version"
+  REF=$1  #Variable for the reference genome. first argument
+  EMAIL=$2  #Variable for the email you wish to get notifications from. second arguement
   #add modules the Sapelo2 way
+else
+  REF=${reference}
+  EMAIL=${email}
+  echo "using sapelo2 version"
+fi
 
 echo "Bash version ${BASH_VERSION}..."
 
