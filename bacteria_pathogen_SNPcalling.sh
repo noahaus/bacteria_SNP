@@ -28,6 +28,7 @@ then
 else
   REF=${reference}
   EMAIL=${email}
+  cd $PBS_O_WORKDIR
   echo "using sapelo2 version"
 fi
 
