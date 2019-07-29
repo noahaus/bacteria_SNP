@@ -58,6 +58,10 @@ STEP_6=$(pwd)/bacteria_SNP/snp_table.py
 CALL_SNP=$(pwd)/bacteria_SNP/call_snp.py
 CHROM=$(pwd)/bacteria_SNP/create_chrom.py
 
+#Optional scripts
+
+OPT_STEP_1=$(pwd)/bacteria_SNP/annotate_snp.py
+
 #create the output structure.
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML $FASTQ $STATS
 
@@ -112,3 +116,11 @@ echo "Step 5 of pipeline complete" | mail -s "STEP 5: ALIGNMENT STATS" $EMAIL
 #A csv file that shows the isolates on the rows, and the SNP sites (with associated QUAL scores) in the columns.
 python $STEP_6 $PHY $MERGE
 echo "Step 6 of pipeline complete" | mail -s "STEP 6: SNP TABLE (CSV)" $EMAIL
+
+#OPTIONAL STEPS
+
+if ["$3"]
+then
+  python $OPT_STEP_1 $3 $MERGE
+else
+  echo "NO INSTRUCTIONS FOR ANNOTATIONS."
