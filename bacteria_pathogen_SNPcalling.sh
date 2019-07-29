@@ -19,7 +19,7 @@ module add FASTX-Toolkit/0.0.14-foss-2016b
 module add Trimmomatic/0.36-Java-1.8.0_144
 module add Biopython/1.70-foss-2016b-Python-2.7.14
 
-if [ -Z "$PBS_O_WORKDIR"]
+if [ -z "$PBS_O_WORKDIR"]
 then
   echo "using local version"
   REF=$1  #Variable for the reference genome. first argument
