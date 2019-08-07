@@ -66,11 +66,15 @@ OPT_STEP_1=$(pwd)/bacteria_SNP/annotate_snp.py
 mkdir $OUT $BAM $BASIC $NODUP $VCF $FILTER $PILEUP $RAW $RAXML $FASTQ $STATS
 
 #move our fastq samples from the current working directory into the FASTQ folder. this way we always have a way to access our original data
+echo "MOVING THE FASTQ FILES"
+echo " "
 cp *.fastq* -t $FASTQ
 
 #STEP 1: ALIGN TO REFERENCE GENOME
 #We should have files separated by R1 and R2. exploit this fact in order to proceed
 #with mapping to the reference genome you provide.
+echo "ALIGNING THE FASTQ FILES TO REFERENCE"
+echo " "
 cd $FASTQ
 python $STEP_1 $REF
 mv *.sorted.bam -t $BASIC
@@ -79,6 +83,8 @@ echo "Step 1 of pipeline complete" | mail -s "STEP 1: READ QUALITY TRIMMING AND 
 #STEP 2: REMOVE DUPLICATE READS
 #This step ensures that no reads that are the result of PCR duplication and are non informative
 #do not complicate further downstream analysis.
+echo "REMOVING DUPLICATES"
+echo " "
 cd $BASIC
 python $STEP_2
 mv *.nodup.sorted.bam -t $NODUP
@@ -87,6 +93,8 @@ echo "Step 2 of pipeline complete" | mail -s "STEP 2: REMOVE DUPLICATE READS" $E
 #STEP 3: VARIANT CALLING
 #For each sample, use freebayes to call SNPs based on the reference genome.
 #perform hard filtering to improve the confidence in SNPs that we find.
+echo "CALLING VARIANTS"
+echo " "
 cd $NODUP
 python $CHROM $REF #We use freebayes-parallel in this pipeline, and in order to do that, we need to break up the reference genome into ranges.
 python $CALL_SNP $REF $PILEUP
@@ -95,6 +103,8 @@ echo "Step 3 of pipeline complete" | mail -s "STEP 3: VARIANT CALLING" $EMAIL
 
 #STEP 4: RAxML TREE GENERATION
 #A basic ML tree for the analysis, can show evolutionary relationship based on nucleotide substitution model.
+echo "BUILDING THE PHYLOGENY"
+echo " "
 cd $PILEUP
 MERGE=$(pwd)/output.merge.vcf
 python $STEP_3 -i $MERGE
@@ -108,6 +118,8 @@ echo "Step 4 of pipeline complete" | mail -s "STEP 4: RAxML TREE GENERATION" $EM
 #STEP 5: ALIGNMENT STATS
 #A file of statistics associated with this run of the pipeline. Let's
 #use these stats in order to create summary figures of the reads and genome mapping.
+echo "STATISTICS"
+echo " "
 cd $STATS
 python $STEP_5 $FASTQ $NODUP $STATS
 echo "Step 5 of pipeline complete" | mail -s "STEP 5: ALIGNMENT STATS" $EMAIL
