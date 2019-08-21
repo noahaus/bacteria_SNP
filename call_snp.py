@@ -56,16 +56,23 @@ intersect_isolates = ""
 for i in range(len(samp_list)):
     print("\n\n\n")
     raw_output = samp_list[i].replace(".addsample.bam",".unfiltered.vcf")
+    raw_updated = samp_list[i].replace(".addsample.bam",".mq_fix.vcf")
     print("SNP CALLING: freebayes-parallel chrom_ranges.txt 8 -E -1 -e 1 -u --strict-vcf -f {}  {} > {}".format(ref_genome.strip(),samp_list[i],raw_output))
     os.system("freebayes-parallel chrom_ranges.txt 8 -E -1 -e 1 -u --strict-vcf -f {}  {} > {}".format(ref_genome.strip(),samp_list[i],raw_output))
+    #Code inspired by the
+    write_fix = open(raw_updated, 'w+')
+        with open(raw_output, 'r') as unfiltered:
+            for line in unfiltered:
+                line = line.strip()
+                new_line = re.sub(r';MQM=', r';MQ=', line)
+                new_line = re.sub(r'ID=MQM,', r'ID=MQ,', new_line)
+                print(new_line, file=write_fix)
+            write_fix.close()
     filtered_output = samp_list[i].replace(".addsample.bam",".filtered.vcf")
-    print("HARD FILTERING: bcftools filter -s LowQual -i ''%QUAL>150 && TYPE=\"snp\" && INFO/DP' > 10 {} > {}".format(raw_output,filtered_output))
-    os.system("bcftools filter -s LowQual -i '%QUAL>20 && TYPE=\"snp\"' {} > {}".format(raw_output,filtered_output))
-    pass_output = samp_list[i].replace(".addsample.bam",".only_pass.vcf")
-    os.system("grep -v \"LowQual\" {} > {}".format(filtered_output,pass_output))
-    os.system("bgzip {}".format(pass_output))
-    os.system("bcftools index {}.gz".format(pass_output))
-    intersect_isolates = intersect_isolates+" {}.gz".format(pass_output)
+    os.system(r'vcffilter -f "QUAL > 20" %s > %s' % (raw_updated, filtered_output))
+    os.system("bgzip {}".format(filtered_output))
+    os.system("bcftools index {}.gz".format(filtered_output))
+    intersect_isolates = intersect_isolates+" {}.gz".format(filtered_output)
     print("\n\n\n")
 #intersect all the VCFs to get common SNPs between all isolates. merge them all into one vcf file.
 os.system("bcftools isec -p {} -n={} {}".format(pileup,len(samp_list),intersect_isolates))

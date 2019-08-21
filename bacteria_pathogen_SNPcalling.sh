@@ -16,7 +16,7 @@ module add BCFtools/1.9-foss-2016b
 module add freebayes/1.2.0
 module add RAxML/8.2.11-foss-2016b-sse
 module add FASTX-Toolkit/0.0.14-foss-2016b
-module add seqtk/1.2-foss-2016b
+module add vcflib/20180410
 module add Trimmomatic/0.36-Java-1.8.0_144
 module add Biopython/1.70-foss-2016b-Python-2.7.14
 
