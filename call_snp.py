@@ -19,6 +19,7 @@ making it easy to create files that can be used to create phylogenetic trees.
 
 import sys # use to access arguments
 import os # use in order to call commands from the terminal script is called in
+import re 
 
 ref_genome = sys.argv[1].strip()
 pileup = sys.argv[2].strip()
