@@ -66,7 +66,7 @@ for i in range(len(samp_list)):
             line = line.strip()
             new_line = re.sub(r';MQM=', r';MQ=', line)
             new_line = re.sub(r'ID=MQM,', r'ID=MQ,', new_line)
-            print(new_line, file=write_fix)
+            write_fix.write(new_line)
         write_fix.close()
     filtered_output = samp_list[i].replace(".addsample.bam",".filtered.vcf")
     os.system(r'vcffilter -f "QUAL > 20" %s > %s' % (raw_updated, filtered_output))
