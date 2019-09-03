@@ -19,7 +19,7 @@ making it easy to create files that can be used to create phylogenetic trees.
 
 import sys # use to access arguments
 import os # use in order to call commands from the terminal script is called in
-import re 
+import re
 
 ref_genome = sys.argv[1].strip()
 pileup = sys.argv[2].strip()
@@ -67,7 +67,7 @@ for i in range(len(samp_list)):
             line = line.strip()
             new_line = re.sub(r';MQM=', r';MQ=', line)
             new_line = re.sub(r'ID=MQM,', r'ID=MQ,', new_line)
-            write_fix.write(new_line)
+            write_fix.write(new_line+"\n")
         write_fix.close()
     filtered_output = samp_list[i].replace(".addsample.bam",".filtered.vcf")
     os.system(r'vcffilter -f "QUAL > 20" %s > %s' % (raw_updated, filtered_output))
