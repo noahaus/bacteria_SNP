@@ -76,7 +76,7 @@ for i in range(len(samp_list)):
     intersect_isolates = intersect_isolates+" {}.gz".format(filtered_output)
     print("\n\n\n")
 #intersect all the VCFs to get common SNPs between all isolates. merge them all into one vcf file.
-os.system("bcftools isec -p {} -n~{} {}".format(pileup,len(samp_list),intersect_isolates))
+os.system("bcftools isec -p {} -n={} {}".format(pileup,len(samp_list),intersect_isolates))
 print("INTESECTING ALL VCFs: bcftools isec -p {} -n={} {}".format(pileup,len(samp_list),intersect_isolates))
 os.chdir(pileup)
 os.system('rm output.merge.vcf.gz output.merge.vcf vcf_list.txt')
