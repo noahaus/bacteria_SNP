@@ -65,8 +65,8 @@ for i in range(len(samp_list)):
     with open(raw_output, 'r') as unfiltered:
         for line in unfiltered:
             line = line.strip()
-            new_line = re.sub(r';MQM=', r';MQ=', line)
-            new_line = re.sub(r'ID=MQM,', r'ID=MQ,', new_line)
+            new_line = re.sub(';MQM=', ';MQ=', line)
+            new_line = re.sub('ID=MQM,', 'ID=MQ,', new_line)
             write_fix.write(new_line+"\n")
         write_fix.close()
     filtered_output = samp_list[i].replace(".addsample.bam",".filtered.vcf")
