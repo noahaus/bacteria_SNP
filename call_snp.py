@@ -62,15 +62,14 @@ for i in range(len(samp_list)):
     os.system("freebayes-parallel chrom_ranges.txt 8 -E -1 -e 1 -u --strict-vcf -f {}  {} > {}".format(ref_genome.strip(),samp_list[i],raw_output))
     #Code inspired by the
     write_fix = open(raw_updated, 'w+')
-    with open(raw_output, 'r') as unfiltered:
-        for line in unfiltered:
-            line = line.strip()
-            new_line = re.sub(';MQM=', ';MQ=', line)
-            new_line = re.sub('ID=MQM,', 'ID=MQ,', new_line)
-            write_fix.write(new_line+"\n")
-        write_fix.close()
+    unfiltered = open(raw_output, 'r')
+    for line in unfiltered:
+        line = line.strip()
+        new_line = re.sub(';MQM=', ';MQ=', line)
+        new_line = re.sub('ID=MQM,', 'ID=MQ,', new_line)
+        write_fix.write(new_line+"\n")
     filtered_output = samp_list[i].replace(".addsample.bam",".filtered.vcf")
-    os.system(r'vcffilter -f "QUAL > 20" %s > %s' % (raw_updated, filtered_output))
+    os.system('vcffilter -f "QUAL > 20" %s > %s' % (raw_updated, filtered_output))
     os.system("bgzip {}".format(filtered_output))
     os.system("bcftools index {}.gz".format(filtered_output))
     intersect_isolates = intersect_isolates+" {}.gz".format(filtered_output)
